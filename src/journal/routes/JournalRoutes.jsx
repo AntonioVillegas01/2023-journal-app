@@ -1,0 +1,15 @@
+import React from 'react';
+import {Navigate, Route, Routes} from "react-router-dom";
+import JournalPage from "../pages/JournalPage.tsx";
+
+const JournalRoutes = () => {
+    return (
+        <Routes>
+            <Route path="/" element={<JournalPage/>}></Route>
+
+            <Route path="/*" element={<Navigate to="/"/>}></Route>
+        </Routes>
+    );
+};
+
+export default JournalRoutes;
