@@ -1,7 +1,7 @@
 
 // @ts-ignore
-import ReactDOM from 'react-dom/client'
 import React from "react";
+import ReactDOM from 'react-dom/client'
 import JournalApp from "./JournalApp.jsx";
 import './styles.css'
 import {BrowserRouter} from "react-router-dom";
