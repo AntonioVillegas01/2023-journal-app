@@ -10,6 +10,12 @@ import {useMemo, useState} from "react";
 
 
 
+const formData = {
+    email: '',
+    password: ''
+}
+
+
 const Loginpage = () => {
 
 
@@ -22,28 +28,17 @@ const Loginpage = () => {
         email: [(value)=> value.includes('@'), 'El correo debe de tener una @'],
         password: [(value)=> value.length >= 6, 'El password debe de tener mas de 6 letras'],
     }
-    const {
-        email,
-        emailValid,
-        password,
-        passwordValid,
-        isFormValid,
-        onInputChange,
-        formState,
-    } = useForm({
-        email: 'marco@google.com',
-        password: '123456'
-    }, formValidations)
+    // @ts-ignore
+    const { email, password, onInputChange } = useForm(formData);
     
     const isAuthenticating = useMemo(() => status === 'checking', [status]);
 
     const onSubmit = (event) => {
         event.preventDefault();
-        setFormSubmitted(true)
-        if(!isFormValid)return;
 
+        // console.log({ email, password })
         // @ts-ignore
-        dispatch(startLoginWithEmailPassword(formState))
+        dispatch( startLoginWithEmailPassword({ email, password }) );
     }
 
     const onGoogleSignIn = () => {
@@ -54,65 +49,78 @@ const Loginpage = () => {
 
     return (
         <AuthLayout title="Login">
-            <form onSubmit={onSubmit} >
+            <form autoComplete="off"
+                onSubmit={ onSubmit } className='animate__animated animate__fadeIn animate__faster'>
                 <Grid container>
-                    <Grid item xs={12} sx={{mt:2}}>
+                    <Grid item xs={ 12 } sx={{ mt: 2 }}>
                         <TextField
-                            label={"Correo"}
-                            type={"email"}
+                            type="email"
+                            placeholder='correo@google.com'
+                            fullWidth
                             name="email"
-                            value={email}
-                            placeholder="correo@google.com"
-                            fullWidth
-                            onChange={onInputChange}
-                            error={!!emailValid && formSubmitted }
-                            helperText={emailValid}
+                            value={ email }
+                            onChange={ onInputChange }
                         />
                     </Grid>
-                    <Grid item xs={12} sx={{mt:2}}>
+
+                    <Grid item xs={ 12 } sx={{ mt: 2 }}>
                         <TextField
-                            label={"Contraseña"}
-                            type={"password"}
-                            name="password"
-                            value={password}
-                            placeholder="correo@google.com"
+                            type="password"
+                            placeholder='Contraseña'
                             fullWidth
-                            onChange={onInputChange}
-                            error={!!passwordValid && formSubmitted }
-                            helperText={passwordValid}
+                            name="password"
+                            value={ password }
+                            onChange={ onInputChange }
                         />
                     </Grid>
-                </Grid>
-                <Grid container spacing={2} sx={{mb:2, mt:1}}>
+
+
                     <Grid
-                        item
-                        xs={12}
-                        display={!!errorMessage ? '': 'none'}
-                    >
-                        <Alert severity='error'>{errorMessage}</Alert>
+                        container
+                        display={ !!errorMessage ? '': 'none' }
+                        sx={{ mt: 1 }}>
+                        <Grid
+                            item
+                            xs={ 12 }
+                        >
+                            <Alert severity='error'>{ errorMessage }</Alert>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}  sm={6}>
-                        <Button
-                            disabled={isAuthenticating}
-                            type="submit" variant="contained" fullWidth>
-                            Login
-                        </Button>
+
+                    <Grid container spacing={ 2 } sx={{ mb: 2, mt: 1 }}>
+                        <Grid item xs={ 12 } sm={ 6 }>
+                            <Button
+                                disabled={ isAuthenticating }
+                                type="submit"
+                                variant='contained'
+                                fullWidth>
+                                Login
+                            </Button>
+                        </Grid>
+                        <Grid item xs={ 12 } sm={ 6 }>
+                            <Button
+                                disabled={ isAuthenticating }
+                                variant='contained'
+                                fullWidth
+                                onClick={ onGoogleSignIn }>
+                                <Google />
+                                <Typography sx={{ ml: 1 }}>Google</Typography>
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}  sm={6}>
-                        <Button
-                            disabled={isAuthenticating}
-                            onClick={onGoogleSignIn} variant="contained" fullWidth>
-                            <Google/>
-                            <Typography sx={{ml:1}}>Google</Typography>
-                        </Button>
+
+
+                    <Grid container direction='row' justifyContent='end'>
+                        <Link component={ RouterLink } color='inherit' to="/auth/register">
+                            Crear una cuenta
+                        </Link>
                     </Grid>
+
                 </Grid>
-                <Grid container justifyContent="end">
-                    <Link component={RouterLink} color="inherit" to="/auth/register">
-                        Crear una Cuenta
-                    </Link>
-                </Grid>
+
+
             </form>
+
         </AuthLayout>
     );
 };

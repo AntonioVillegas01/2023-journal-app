@@ -39,12 +39,10 @@ const SideBar = ({drawerWidth=240}) => {
                 <Divider />
                 <List>
                     {
-                        notes.map(({title,body,id},idx)=>(
+                        notes.map((note,idx)=>(
                             <SideBarItem
                                 key={idx}
-                                title={title}
-                                body={body}
-                                id={id}
+                                note={note}
                             ></SideBarItem>
                         ))
                     }

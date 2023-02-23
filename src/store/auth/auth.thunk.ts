@@ -7,6 +7,7 @@ import {
 } from "../../firebase/providers";
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
+import {clearNotesLogOut} from "../journal";
 
 
 export const checkingAuthentication = (email, password)   => {
@@ -63,6 +64,7 @@ export const startLoginWithEmailPassword = ({email,password}) => (
 export const startLogOut = ()=> (
     async (dispatch) => {
         await logOutFirebase()
+        dispatch(clearNotesLogOut())
         dispatch(logout({}))
     }
 )

@@ -2,14 +2,29 @@ import {Grid, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/m
 import {TurnedInNot} from "@mui/icons-material";
 // @ts-ignore
 import React, {useMemo} from "react";
+import {useDispatch} from "react-redux";
+import {setActiveNote} from "../../store/journal";
 
 type SideBarItemProps = {
-    title: any
-    body: any
-    id: any;
+    note: any;
 }
 
-const SideBarItem: React.FC<SideBarItemProps> = ({title='', body, id}) => {
+const SideBarItem: React.FC<SideBarItemProps> = ({note}) => {
+
+    const {
+        title='',
+        body,
+        id,
+        date,
+        imageUrls=[]
+    } = note
+
+    const dispatch = useDispatch();
+
+
+    const onClickNote = () =>{
+        dispatch(setActiveNote({title, body, id, date, imageUrls}))
+    }
 
     const newTitle = useMemo(() => {
         return title.length > 17
@@ -18,10 +33,8 @@ const SideBarItem: React.FC<SideBarItemProps> = ({title='', body, id}) => {
     }, [title]);
 
     return (
-        <ListItem key={id}
-                  disablePadding
-        >
-            <ListItemButton>
+        <ListItem disablePadding>
+            <ListItemButton onClick={onClickNote}>
                 <ListItemIcon>
                     <TurnedInNot/>
                 </ListItemIcon>
